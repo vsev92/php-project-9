@@ -10,7 +10,7 @@
 <body>
     <?= require '_header.phtml' ?>
 
-    <?= $a ?>
+    <?= htmlspecialchars($flash) ?>
     <div class="container mt-3">
   <h1>Сайты</h1>
   <div class="row">
@@ -25,24 +25,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>www.github.com</td>
-              <td>27.01.2025</td>
+          <?php foreach($sites as $site): echo
+              <<<ITEM
+              <tr>
+              <td>{$site->getId()}</td>
+              <td>{$site->getUrl()}</td>
+              <td>{$site->getTimestamp()}</td>
               <td>200</td>
-            </tr>
-            <tr>
-            <td>2</td>
-              <td>www.mail.ru</td>
-              <td>17.01.2025</td>
-              <td>300</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>www.deil.ru</td>
-              <td>12.01.2025</td>
-              <td>404</td>
-            </tr>
+              </tr>
+              ITEM;
+          endforeach; ?>
           </tbody>
         </table>
       </div>

@@ -22,6 +22,7 @@
         "slim/http": "dev-master",
         "slim/php-view": "3.x-dev",
         "php-di/php-di": "dev-master",
-        "slim/flash": "dev-master"
+        "slim/flash": "dev-master",
+        "illuminate/collections": "10.x-dev"
     }
 }

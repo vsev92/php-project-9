@@ -18,9 +18,23 @@ class Site{
 
     }
 
+    public static function fromFetchArrayRow(array $row) {
+       $site = new self($row['url']) ;
+       $site->setTimestamp($row['createdat']);
+       $site->setId($row['id']);
+       return $site;
+
+    }
+
+
     public function getId ()
     {
         return $this->id ?? null;
+    }
+
+    public function setId(string $id)
+    {
+        $this->id = $id;
     }
 
     public function getUrl()
@@ -28,14 +42,15 @@ class Site{
         return $this->url ?? null;
     }
 
+
     public function getTimestamp()
     {
         return $this->timestamp ?? null;
     }
 
-    public function setId(string $id)
+    private function setTimestamp(string $timestamp)
     {
-        $this->id = $id;
+        $this->timestamp = $timestamp;
     }
 
 
@@ -44,6 +59,8 @@ class Site{
         return true;
 
     }
+
+
 
 
 }

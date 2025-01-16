@@ -6,4 +6,4 @@
 !/logs/README.md
 .phpunit.result.cache
 bdHelp.md
-/public/.env
+/src/.env

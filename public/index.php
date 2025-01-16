@@ -19,31 +19,7 @@ use App\Site;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-///database connection
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->safeLoad();
-$databaseUrl = parse_url($_ENV['DATABASE_URL']);
 
-//var_dump($databaseUrl);
-$username = $databaseUrl['user']; // janedoe
-$password = $databaseUrl['pass']; // mypassword
-$host = $databaseUrl['host']; // localhost
-$port = (string)$databaseUrl['port'] ?? '5432'; // 5432
-$dbName = ltrim($databaseUrl['path'], '/');
-$dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
-   // var_dump($dsn);
-    // make a database connection
-    $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-
-    if (!$pdo) {
-        throw new Exception('Failed to connect to database');
-    }
-    
-    $dbo = new AnalyzerDAO($pdo);
-
-
-
-////
 
 
 
@@ -51,6 +27,17 @@ $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
 $container = new Container();
 
 session_start();
+
+$container->set('getSiteDAO', function () {
+
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->safeLoad();
+    $aDatabaseUrl = (string)$_ENV['DATABASE_URL'];
+   
+    return new AnalyzerDAO($aDatabaseUrl);
+});
+
+
 $container->set('renderer', function () {
    
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
@@ -79,7 +66,12 @@ $app->get('/', function ($request, $response, $args) {
 
 $app->get('/urls', function ($request, $response, $args) {
 
-    return $this->get('renderer')->render($response, '/../templates/urls.phtml');
+    $messages = $this->get('flash')->getMessages();
+    $siteDAO = $this->get('getSiteDAO');
+    $sites = $siteDAO->getAll();
+    $params = ['sites' => $sites, 'flash' => $messages['success'][0]];
+
+    return $this->get('renderer')->render($response, '/../templates/urls.phtml', $params);
 })->setName('urls');
 
 
@@ -95,16 +87,16 @@ $app->post('/urls', function ($request, $response) use ($dbo, $router) {
     if(Site::isUrlValid($url)) {
         var_dump($url);
         $site = new Site($url);
-        $dbo->save($site);
+        $siteDAO = $this->get('getSiteDAO');
+        $siteDAO->save($site);
         $this->get('flash')->addMessage('success', 'Сайт добавлен');
 
-        $url = $router->urlFor('home');
-        var_dump($url);
+        $url = $router->urlFor('urls');
         $newResponce = $response->withRedirect($url);
         return $newResponce;
 
     } else {
-        var_dump(3);
+
         return $this->get('renderer')->render($response, '/../templates/index.phtml', $params);
 
     }
