@@ -19,8 +19,8 @@ class Site{
     }
 
     public static function fromFetchArrayRow(array $row) {
-       $site = new self($row['url']) ;
-       $site->setTimestamp($row['createdat']);
+       $site = new self($row['name']) ;
+       $site->setTimestamp($row['created_at']);
        $site->setId($row['id']);
        return $site;
 
@@ -56,7 +56,7 @@ class Site{
 
     public static function isUrlValid(string $url)
     {
-        return true;
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
 
     }
 

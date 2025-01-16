@@ -12,28 +12,24 @@
 
     <?= htmlspecialchars($flash) ?>
     <div class="container mt-3">
-  <h1>Сайт</h1>
+  <h1>Сайт <?=htmlspecialchars($site->getUrl())?></h1>
   <div class="row">
       <div class="table-responsive">
         <table class="table table-bordered  table-hover text-nowrap">
           </thead>
           <tbody>
-          <?php foreach($sites as $site): echo
-              <<<ITEM
               <tr>
                  <td>ID</td>
-                 <td>{$site->getId()}</td>
+                 <td><?=htmlspecialchars($site->getId())?></td>
               </tr>
               <tr>
                  <td>Имя</td>
-                 <td>{$site->getUrl()}</td>
+                 <td><?=htmlspecialchars($site->getUrl()) ?></td>
                  </tr>
               <tr>
                  <td>Дата создания</td>
-                 <td>{$site->getTimestamp()}</td>
+                 <td><?=htmlspecialchars($site->getTimestamp())?></td>
               </tr>
-              ITEM;
-          endforeach; ?>
           </tbody>
         </table>
 
