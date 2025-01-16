@@ -12,6 +12,7 @@
 
     <?= htmlspecialchars($flash) ?>
     <div class="container mt-3">
+      
   <h1>Сайт <?=htmlspecialchars($site->getUrl())?></h1>
   <div class="row">
       <div class="table-responsive">
@@ -32,24 +33,48 @@
               </tr>
           </tbody>
         </table>
-
-<table>
-
-
-<thead>
-            <tr>
-              <th>ID</th>
-              <th>Имя</th>
-              <th>Последняя проверка</th>
-              <th>Код ответа</th>
-            </tr>
-</table>
-
       </div>
-    </div>
-</div>
-  
+   </div>
 
+
+
+
+   <div class="row">
+       <form method="post" action="/urls/1/checks">
+           <input type="submit" class="btn btn-primary" value="Запустить проверку">
+       </form>
+       <div class="table-responsive mt-3">
+          <table class="table table-bordered  table-hover text-nowrap">
+           <thead>
+               <tr>
+                  <th>ID</th>
+                  <th>Код ответа</th>
+                  <th>h1</th>
+                  <th>title</th>
+                  <th>description</th>
+                  <th>Дата создания</th>
+               </tr>
+            </thead>
+            <tbody>
+           
+            <tr>
+               <td>1</td>
+               <td>200</td>
+               <td class="text-break"></td>
+               <td class="text-break">Анализатор страниц</td>
+               <td class="text-break"></td>
+              <td>2025-01-16 09:31:46</td>
+            </tr>
+          </tbody>
+         </table>
+       </div>
+   </div>
+
+
+  </div>
+   
+
+  
 
 
 
