@@ -25,16 +25,19 @@
             </tr>
           </thead>
           <tbody>
-          <?php foreach($sites as $site): echo
-              <<<ITEM
-              <tr>
-                 <td>{$site->getId()}</td>
-                 <td>{$site->getUrl()}</td>
-                 <td>{$site->getTimestamp()}</td>
-                 <td>-</td>
-              </tr>
-              ITEM;
-          endforeach; ?>
+          <?php foreach($sites as $site): ?>
+            
+            <tr>
+               <td class="text-break"><?= htmlspecialchars($site->getId()) ?></td>
+               <td class="text-break"><?= htmlspecialchars($site->getUrl())?></td>
+               <td class="text-break"><?= htmlspecialchars($site->getTimestamp())?></td>
+            </tr>
+      
+            
+        <?php endforeach; ?>
+
+
+
           </tbody>
         </table>
 

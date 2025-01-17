@@ -13,7 +13,7 @@ class Site{
     private string $timestamp;
 
     public function __construct(string $url) {
-        $this->timestamp = Carbon::now()->format('Y-m-d');
+        $this->timestamp = Carbon::now()->format('Y-m-d H:i:s');
         $this->url = $url;
 
     }

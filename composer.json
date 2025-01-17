@@ -23,6 +23,11 @@
         "slim/php-view": "3.x-dev",
         "php-di/php-di": "dev-master",
         "slim/flash": "dev-master",
-        "illuminate/collections": "10.x-dev"
+        "illuminate/collections": "10.x-dev",
+        "guzzlehttp/guzzle": "^7.0",
+        "imangazaliev/didom": "dev-master"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "6.4.x-dev"
     }
 }
