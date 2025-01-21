@@ -78,6 +78,26 @@ class CheckDAO{
             return $result;
     }
 
+    public function getLastChekStatusCode(string $siteUrl) :string
+    {
+        $sql =  <<<SQL
+                WITH checks as (
+                SELECT c.status_code, c .created_at
+                FROM public.urls as u INNER JOIN public.url_checks as c
+                ON u.id = c.url_id
+                WHERE u.name = ? 
+                )
+                SELECT status_code FROM checks WHERE 
+                checks.created_at = (SELECT MAX(checks.created_at) FROM checks)
+                SQL;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($siteUrl);
+        if ($result = $stmt->fetch()!==false) {
+            return (string)$result['status_code'];
+        }
+        return '';
+    }
+
 
 }
 

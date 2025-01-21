@@ -9,7 +9,9 @@
 </head>
 <body>
     <?= require '_header.phtml' ?>
-
+    <div class="alert alert-<?=$flashType?>" role="alert">
+           <?= htmlspecialchars($flash) ?>
+    </div>
     <?= htmlspecialchars($flash) ?>
     <div class="container mt-3">
   <h1>Сайт</h1>
@@ -31,6 +33,7 @@
                <td class="text-break"><?= htmlspecialchars($site->getId()) ?></td>
                <td class="text-break"><?= htmlspecialchars($site->getUrl())?></td>
                <td class="text-break"><?= htmlspecialchars($site->getTimestamp())?></td>
+               <td class="text-break"><?= htmlspecialchars($site->getLastStatusCode())?></td>
             </tr>
       
             

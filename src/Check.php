@@ -63,26 +63,40 @@ class Check{
             $stringBody = (string) $body;
             $document = new Document($stringBody);
 
+          
+
+            
+
             if ($document->has('title')) {
-                $elements = $document->find('title');
-                // code
+                $titlesCollection = $document->find('title');
+                if (count($titlesCollection) > 0) {
+                    $this->title = $titlesCollection[0]->text();
+                }
             }
-            dump($elements[0]->text());
+
+            
    
             if ($document->has('h1')) {
-                $h1 = $document->find('h1')[0]->text();
-                // code
+                $h1Collection =  $document->find('h1');
+                if (count($h1Collection ) > 0) {
+                    $this->h1 = $h1Collection[0]->text();
+                }
             }
-            dump($h1);
+         
+
+
+
+         
 
         
-            if (count($metas = $document->find("//meta[contains(@attribute, 'content')]", Query::TYPE_XPATH)) > 0) {
-                dump($metas[0]->xpath('//content'));
+       
+            $metaCollection = $document->find("//meta[@name='description']", Query::TYPE_XPATH);
+         
+          
+           if (count($metaCollection) > 0) {
+               $this->description = $metaCollection[0]->getAttribute('content');
             }
-      
-            //$content = $document->find('meta')[0]->xpath('//content')[0]->text();
 
-            //dump($content);
    
             
 

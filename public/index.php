@@ -75,9 +75,14 @@ $app->get('/', function ($request, $response, $args) {
 $app->get('/urls', function ($request, $response, $args) {
 
     $messages = $this->get('flash')->getMessages();
+    $messageType = array_keys($messages)[0];
+    $message = $messages[$messageType][0];
+
     $siteDAO = $this->get('getSiteDAO');
     $sites = $siteDAO->getAll();
-    $params = ['sites' => $sites, 'flash' => $messages['success'][0]];
+
+
+    $params = ['sites' => $sites, 'flash' => $message, 'flashType' => $messageType];
 
     return $this->get('renderer')->render($response, '/../templates/urls.phtml', $params);
 })->setName('urls');
@@ -86,6 +91,9 @@ $app->get('/urls', function ($request, $response, $args) {
 $app->get('/urls/{id}', function ($request, $response, $args) {
   
     $messages = $this->get('flash')->getMessages();
+    $messageType = array_keys($messages)[0];
+    $message = $messages[$messageType][0];
+
     $siteDAO = $this->get('getSiteDAO');
     $id = $args['id'];
     $site = $siteDAO->findById($id);
@@ -93,7 +101,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
     $checkDAO = $this->get('getCheckDAO');
     
     $checks = $checkDAO->findChecksBySiteId($id);
-    $params = ['site' => $site, 'checks'=> $checks, 'flash' => $messages['success'][0]];
+    $params = ['site' => $site, 'checks'=> $checks, 'flash' => $message, 'flashType' => $messageType];
 
     
 
@@ -106,20 +114,21 @@ $app->post('/urls', function ($request, $response) use ($router) {
    
 
 	$aUrl= $request->getParsedBody()['url'];
-    $url = $aUrl['name'];
+    $urlRaw = $aUrl['name'];
     $id = 0;
 
    
-    if(Site::isUrlValid($url)) {
+    if(Site::isUrlValid($urlRaw)) {
+        $site = new Site($urlRaw);
         $siteDAO = $this->get('getSiteDAO');
-        $siteFromDB = $siteDAO->findByName($url);
+        $siteFromDB = $siteDAO->findByName($site->getUrl());
+
         if(is_null($siteFromDB)){
-            $site = new Site($url);
             if($siteDAO->save($site)) {
                 $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
                 $id = $site->getId();
             } else {
-                $this->get('flash')->addMessage('success', 'Ошибка добавления страницы');
+                $this->get('flash')->addMessage('danger', 'Ошибка добавления страницы');
             }
         } else {
             $this->get('flash')->addMessage('success', 'Страница уже существует');
@@ -152,7 +161,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         $checkDAO->save($check);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     } catch (ConnectException $e) {
-        $this->get('flash')->addMessage('success', 'Произошла ошибка при проверке, не удалось подключиться');
+        $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     } catch (ClientException $e) {
         return $this->get('renderer')->render($response, '/../templates/ServerError.phtml');
     } 

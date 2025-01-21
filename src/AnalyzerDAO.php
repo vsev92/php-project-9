@@ -62,8 +62,8 @@ class AnalyzerDAO{
     public function getAll() :array
     {
        
-            $sql = "SELECT * FROM urls";
-            
+            //$sql = "SELECT * FROM urls";
+            $sql = file_get_contents(__DIR__.'/scripts/selectAllSitesWithStatus.sql');
            
             $stmt = $this->conn->query($sql);
             $col = collect($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -80,13 +80,15 @@ class AnalyzerDAO{
     }
 
 
-    public function findByName($name)
+    public function findByName($url)
     {
             $sql = "SELECT * FROM urls WHERE name = ?"; 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$name]);   
-            $fetched = $stmt->fetch(PDO::FETCH_ASSOC)[0];
-            if(!is_null($fetched)) {
+            $stmt->execute([$url]);  
+            $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
+           // dump($url);
+           // dump($fetched);
+            if($fetched !== false) {
                 return  Site::fromFetchArrayRow($fetched);
             }
             return null;    
