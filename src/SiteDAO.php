@@ -7,39 +7,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 
-class AnalyzerDAO{
+class SiteDAO{
 
     private PDO $conn;
 
-    public function __construct(string $aDatabaseUrl) {
-
-       ///database connection
-       $databaseUrl = parse_url($aDatabaseUrl);
-       $username = $databaseUrl['user']; // janedoe
-       $password = $databaseUrl['pass']; // mypassword
-       $host = $databaseUrl['host']; // localhost
-       $port = (string)$databaseUrl['port'] ?? '5432'; // 5432
-       $dbName = ltrim($databaseUrl['path'], '/');
-       $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
-       $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-       if (!$pdo) {
-            throw new Exception('Failed to connect to database');
-       }
-        $this->conn = $pdo;
-        $this->init();
-    }
-
-    private function init() 
-    {
-        
-
-        
-        
-        $sqlSiteTableCreate = file_get_contents(__DIR__.'/scripts/database.sql');
-       // var_dump($sqlSiteTableCreate);
-        $this->conn->exec($sqlSiteTableCreate);
-
-
+    public function __construct(PDO $conn) {
+        $this->conn = $conn;
     }
 
     public function save(Site $site) :bool
@@ -100,7 +73,7 @@ class AnalyzerDAO{
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$id]);   
             $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
-            if(!is_null($fetched)) {
+            if($fetched !== false) {
                 return  Site::fromFetchArrayRow($fetched);
             }
             return null;    

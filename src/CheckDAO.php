@@ -11,31 +11,8 @@ class CheckDAO{
 
     private PDO $conn;
 
-    public function __construct(string $aDatabaseUrl) {
-
-       ///database connection
-       $databaseUrl = parse_url($aDatabaseUrl);
-       $username = $databaseUrl['user']; // janedoe
-       $password = $databaseUrl['pass']; // mypassword
-       $host = $databaseUrl['host']; // localhost
-       $port = (string)$databaseUrl['port'] ?? '5432'; // 5432
-       $dbName = ltrim($databaseUrl['path'], '/');
-       $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
-       $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-       if (!$pdo) {
-            throw new Exception('Failed to connect to database');
-       }
-        $this->conn = $pdo;
-        $this->init();
-    }
-
-    private function init() 
-    {
-    
-        $sqlSiteTablesCreate = file_get_contents(__DIR__.'/scripts/database.sql');
-        $this->conn->exec($sqlSiteTablesCreate);
-
-
+    public function __construct(PDO $conn) {
+        $this->conn = $conn;
     }
 
     public function save(Check $check) :bool
