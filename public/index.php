@@ -10,7 +10,8 @@ use App\SiteDAO;
 use App\Site;
 use App\CheckDAO;
 use App\Check;
-use App\DBConnector;
+use App\DbConnector;
+use App\DIConfigurator;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ClientException;
 
@@ -28,23 +29,28 @@ $container = new Container();
 
 session_start();
 
+$container->set(DIConfigurator::class, function () {
 
 
-$container->set('DBConnector:class', function () {
+    return new DIConfigurator();
 
+});
 
-    return new DBConnector();
+$container->set(DbConnector::class, function (DIConfigurator $dic) {
+
+    $url = $dic->getUrlForDbConnector();
+    return new DbConnector($url);
 
 });
 
 
-$container->set('SiteDAO:class', function (DBConnector $dbc) {
+$container->set(SiteDAO::class, function (DbConnector $dbc) {
 
     
     return new SiteDAO($dbc->getConnection());
 });
 
-$container->set('CheckDAO:class', function (DBConnector $dbc) {
+$container->set(CheckDAO::class, function (DbConnector $dbc) {
 
     return new CheckDAO($dbc->getConnection());
 });
@@ -82,7 +88,7 @@ $app->get('/urls', function ($request, $response, $args) {
     $message = $messages[$messageType][0];
 
   
-    $siteDAO = $this->get('SiteDAO:class');
+    $siteDAO = $this->get(SiteDAO::class);
     $sites = $siteDAO->getAll();
 
 
@@ -97,8 +103,8 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
     $messageType = array_keys($messages)[0];
     $message = $messages[$messageType][0];
 
-    $siteDAO = $this->get('SiteDAO:class');
-    $checkDAO = $this->get('CheckDAO:class');
+    $siteDAO = $this->get(SiteDAO::class);
+    $checkDAO = $this->get(CheckDAO::class);
  
    
     $id = $args['id'];
@@ -124,7 +130,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
     
     if(Site::isUrlValid($urlRaw)) {
         $site = new Site($urlRaw);
-        $siteDAO = $this->get('SiteDAO:class');
+        $siteDAO = $this->get(SiteDAO::class);
         $siteFromDB = $siteDAO->findByName($site->getUrl());
         if(is_null($siteFromDB)){
             if($siteDAO->save($site)) {
@@ -158,11 +164,11 @@ $app->post('/urls', function ($request, $response) use ($router) {
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $id = $args['url_id'];
     $check =  new Check($id);
-    $siteDAO = $this->get('SiteDAO:class');
+    $siteDAO = $this->get(SiteDAO::class);
     $site = $siteDAO->findById((string)$id);
     try{
         $check->check($site->getUrl());
-        $checkDAO = $this->get('CheckDAO:class');
+        $checkDAO = $this->get(CheckDAO::class);
         $checkDAO->save($check);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     } catch (ConnectException $e) {
