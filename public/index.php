@@ -87,7 +87,6 @@ $app->get('/urls', function ($request, $response, $args) {
 
 
     $params = ['sites' => $sites, 'flash' => $message, 'flashType' => $messageType];
-
     return $this->get('renderer')->render($response, '/../templates/urls.phtml', $params);
 })->setName('urls');
 

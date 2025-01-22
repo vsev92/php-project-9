@@ -35,7 +35,7 @@ class SiteDAO{
     public function getAll() :array
     {
        
-            //$sql = "SELECT * FROM urls";
+        
             $sql = file_get_contents(__DIR__.'/scripts/selectAllSitesWithStatus.sql');
            
             $stmt = $this->conn->query($sql);
