@@ -59,8 +59,6 @@ class SiteDAO{
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$url]);  
             $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
-           // dump($url);
-           // dump($fetched);
             if($fetched !== false) {
                 return  Site::fromFetchArrayRow($fetched);
             }

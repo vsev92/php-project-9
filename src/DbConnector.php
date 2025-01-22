@@ -23,10 +23,11 @@ class DbConnector{
     private function connect($dbUrl) 
     {
         $databaseUrl = parse_url($dbUrl);
+       //dump($databaseUrl);
         $username = $databaseUrl['user']; // janedoe
         $password = $databaseUrl['pass']; // mypassword
         $host = $databaseUrl['host']; // localhost
-        $port = (string)$databaseUrl['port'] ?? '5432'; // 5432
+        $port = array_key_exists('port', $databaseUrl) ? (string)$databaseUrl['port'] : '5432';
         $dbName = ltrim($databaseUrl['path'], '/');
         $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
         $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
