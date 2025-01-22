@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Lint
       - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
       - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
       - run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
