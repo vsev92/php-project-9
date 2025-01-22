@@ -18,7 +18,7 @@ class DBConnector{
         $dotenv->safeLoad();
         $aDatabaseUrl = (string)$_ENV['DATABASE_URL'];
        ///database connection
-
+       dump($aDatabaseUrl);
        $databaseUrl = parse_url($aDatabaseUrl);
        $username = $databaseUrl['user']; // janedoe
        $password = $databaseUrl['pass']; // mypassword
@@ -26,6 +26,7 @@ class DBConnector{
        $port = (string)$databaseUrl['port'] ?? '5432'; // 5432
        $dbName = ltrim($databaseUrl['path'], '/');
        $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
+       dump($dsn);
        $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
        if (!$pdo) {
             throw new Exception('Failed to connect to database');
@@ -40,7 +41,7 @@ class DBConnector{
 
         
         
-        $sqlSiteTableCreate = file_get_contents(__DIR__.'/scripts/database.sql');
+        $sqlSiteTableCreate = file_get_contents(__DIR__.'/../database.sql');
         $this->conn->exec($sqlSiteTableCreate);
 
 
