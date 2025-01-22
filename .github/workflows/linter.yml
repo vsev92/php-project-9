@@ -1,21 +1,27 @@
 name: linter
+
 on:
   push:
     branches:
       - '**'
     tags:
       - '**'
+
 jobs:
-  build: # имя взято для примера
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup phpch
-        run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
-        run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
-        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
-        run: php phpcs.phar -h
-        run: php phpcbf.phar -h 
-      - name: lint
-        run: make lint    
+
+      - name: Setup PHP
+        # Action gives to setup the PHP environment to test application
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          # Specify the PHP version
+          php-version: '8.3'
+      - name: Install
+        # Install project
+        run: make install
+      - name: Lint
+        run: make lint 
