@@ -28,7 +28,9 @@ class Site
        $site = new self($row['name']) ;
        $site->setTimestamp($row['created_at']);
        $site->setId($row['id']);
-       $site->setLastStatusCode((string)$row['status_code'] ?? '');
+       if(array_key_exists('status_code',$row)) {
+         $site->setLastStatusCode((string)$row['status_code']);
+       }
        return $site;
 
     }
@@ -71,7 +73,7 @@ class Site
 
 	public function getLastStatusCode(): string 
     {
-        return $this->lastStatusCode;
+        return $this->lastStatusCode ?? '';
     }
 
     public function setLastStatusCode(string $statusCode): self
