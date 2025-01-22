@@ -4,7 +4,6 @@ jobs:
   build: # имя взято для примера
     runs-on: ubuntu-latest
     steps:
-    steps:
       - uses: actions/checkout@v4
       - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
       - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
