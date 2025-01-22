@@ -13,4 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Lint
-        run: make lint        
+      # Download using curl
+        run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
+        run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+        run: php phpcs.phar -h
+        run: php phpcbf.phar -h      
