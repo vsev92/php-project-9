@@ -11,29 +11,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+   #   - uses: actions/checkout@v4
 
       #- name: Hexlet project check
        # uses: hexlet/project-action@release
        # with:
        #   hexlet-id: ${{ secrets.HEXLET_ID }}
-      - name: Setup PHP
+      #- name: Setup PHP
         # Action gives to setup the PHP environment to test application
         # https://github.com/shivammathur/setup-php
-        uses: shivammathur/setup-php@v2
-        with:
+       # uses: shivammathur/setup-php@v2
+      #  with:
           # Specify the PHP version
-          php-version: '8.3'
-      - name: Install
-        # Install project
-        run: make install
-      - name: Publish code coverage
-        uses: paambaati/codeclimate-action@v3.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: make test-coverage-clover
-          coverageLocations: build/logs/clover.xml:clover
-          debug: true
-      - name: Lint
+     #     php-version: '8.3'
+     # - name: Install
+      #  # Install project
+      #  run: make install
+     # - name: Publish code coverage
+     #   uses: paambaati/codeclimate-action@v3.0.0
+     #   env:
+     #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+     #   with:
+     #     coverageCommand: make test-coverage-clover
+     #     coverageLocations: build/logs/clover.xml:clover
+     #     debug: true
+     # - name: Lint
         run: make lint        
