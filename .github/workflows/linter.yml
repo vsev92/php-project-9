@@ -15,8 +15,8 @@ jobs:
       - name: Lint
       # Download using curl
         run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
-        run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
-        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-        run: wget https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
-        run: php phpcs.phar -h
-        run: php phpcbf.phar -h      
+             curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+             wget https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+             wget https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
+             php phpcs.phar -h
+             php phpcbf.phar -h      
