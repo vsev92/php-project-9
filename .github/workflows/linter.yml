@@ -1,14 +1,8 @@
-name: code-coverage-and-linter
-
-on:
-  push:
-    branches:
-      - '**'
-    tags:
-      - '**'
+name: linter
 
 jobs:
-  build:
+  build: # имя взято для примера
+    runs-on: ubuntu-latest
     - uses: actions/checkout@v4
     - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar  
     - run: curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
