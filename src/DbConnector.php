@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Exception;
+
 class DbConnector
 {
     private \PDO $conn;
@@ -12,9 +14,9 @@ class DbConnector
         $this->init();
     }
 
-    private function connect($dbUrl)
+    private function connect(string $dbUrl): \PDO
     {
-        $databaseUrl = parse_url($dbUrl);
+        $databaseUrl = (array)parse_url($dbUrl);
         $username = $databaseUrl['user'];
         $password = $databaseUrl['pass'];
         $host = $databaseUrl['host'];
@@ -22,17 +24,28 @@ class DbConnector
         $dbName = ltrim($databaseUrl['path'], '/');
         $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
         $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-        if (!$pdo) {
+        if (is_bool($pdo) && !$pdo) {
             throw new Exception('Failed to connect to database');
         }
         return $pdo;
     }
 
+    private function getDbInitScript(): string
+    {
+        $sqlSiteTableCreate = file_get_contents(__DIR__ . '/../database.sql');
+        if ($sqlSiteTableCreate === false) {
+            throw new Exception('Failed to read Database initial script');
+        }
+        return (string)$sqlSiteTableCreate;
+    }
+
     private function init()
     {
-
-        $sqlSiteTableCreate = file_get_contents(__DIR__ . '/../database.sql');
-        $this->conn->exec($sqlSiteTableCreate);
+        $sql = getDbInitScript();
+        $result = $this->conn->exec($sql);
+        if ($result === false) {
+            throw new Exception('Failed to prepare Database');
+        }
     }
 
 
