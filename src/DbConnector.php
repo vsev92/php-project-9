@@ -6,24 +6,26 @@ use \PDO;
 
 
 
-class DbConnector{
+class DbConnector
+{
 
     private PDO $conn;
 
-    public function __construct(string $dbUrl) {
+    public function __construct(string $dbUrl)
+    {
 
-       ///database connection
-     /*  $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+        ///database connection
+        /*  $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
        $dotenv->safeLoad();
        $dbUrl = (string)$_ENV['DATABASE_URL'];*/
-       $this->conn = $this->connect($dbUrl);
-       $this->init();
+        $this->conn = $this->connect($dbUrl);
+        $this->init();
     }
 
-    private function connect($dbUrl) 
+    private function connect($dbUrl)
     {
         $databaseUrl = parse_url($dbUrl);
-       //dump($databaseUrl);
+        //dump($databaseUrl);
         $username = $databaseUrl['user']; // janedoe
         $password = $databaseUrl['pass']; // mypassword
         $host = $databaseUrl['host']; // localhost
@@ -32,33 +34,21 @@ class DbConnector{
         $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
         $pdo = new PDO($dsn, $username, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
         if (!$pdo) {
-             throw new Exception('Failed to connect to database');
+            throw new Exception('Failed to connect to database');
         }
         return $pdo;
-
     }
 
-    private function init() 
+    private function init()
     {
-        
-        $sqlSiteTableCreate = file_get_contents(__DIR__.'/../database.sql');
+
+        $sqlSiteTableCreate = file_get_contents(__DIR__ . '/../database.sql');
         $this->conn->exec($sqlSiteTableCreate);
-
     }
 
-    
-    public function getConnection() :PDO
+
+    public function getConnection(): PDO
     {
-       return $this->conn;
+        return $this->conn;
     }
-
-
-
-
-
 }
-
-
-
-
-

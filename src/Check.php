@@ -10,7 +10,8 @@ use DiDom\Query;
 use illuminate\support;
 
 
-class Check{
+class Check
+{
 
     private string $urlId;
     private string $id;
@@ -23,90 +24,78 @@ class Check{
 
     public function __construct(string $urlId)
     {
-       $this->urlId = $urlId;
-       $this->setCreatedAt(Carbon::now()->format('Y-m-d H:i:s'));
-   }
+        $this->urlId = $urlId;
+        $this->setCreatedAt(Carbon::now()->format('Y-m-d H:i:s'));
+    }
 
 
 
     public static function fromFetchArray($arr)
     {
         $check = new self($arr['url_id']);
-               $check->setId($arr['id'])
-                        ->setStatusCode($arr['status_code'])
-                         ->setH1($arr['h1'])
-                          ->setTitle($arr['title'])
-                            ->setDescription($arr['description'])
-                              ->setCreatedAt($arr['created_at']);
-        return $check;                      
-     
+        $check->setId($arr['id'])
+            ->setStatusCode($arr['status_code'])
+            ->setH1($arr['h1'])
+            ->setTitle($arr['title'])
+            ->setDescription($arr['description'])
+            ->setCreatedAt($arr['created_at']);
+        return $check;
     }
 
 
     public function check($url)
-    {    
-      // try {
-      $client = new Client([   
-           'base_uri' => $url,
-           'timeout'  => 2.0,
+    {
+        // try {
+        $client = new Client([
+            'base_uri' => $url,
+            'timeout'  => 2.0,
         ]);
 
 
-      
 
-            $response = $client->get($url);
-            $code = $response->getStatusCode(); // 200
-            //$reason = $response->getReasonPhrase(); // OK
-            $this->setStatusCode($code);
 
-            $body = $response->getBody();
-            $stringBody = (string) $body;
-            $document = new Document($stringBody);
+        $response = $client->get($url);
+        $code = $response->getStatusCode(); // 200
+        //$reason = $response->getReasonPhrase(); // OK
+        $this->setStatusCode($code);
 
-          
+        $body = $response->getBody();
+        $stringBody = (string) $body;
+        $document = new Document($stringBody);
 
-            
 
-            if ($document->has('title')) {
-                $titlesCollection = $document->find('title');
-                if (count($titlesCollection) > 0) {
-                    $this->title = $titlesCollection[0]->text();
-                }
+
+
+
+        if ($document->has('title')) {
+            $titlesCollection = $document->find('title');
+            if (count($titlesCollection) > 0) {
+                $this->title = $titlesCollection[0]->text();
             }
+        }
 
-            
-   
-            if ($document->has('h1')) {
-                $h1Collection =  $document->find('h1');
-                if (count($h1Collection ) > 0) {
-                    $this->h1 = $h1Collection[0]->text();
-                }
+
+
+        if ($document->has('h1')) {
+            $h1Collection =  $document->find('h1');
+            if (count($h1Collection) > 0) {
+                $this->h1 = $h1Collection[0]->text();
             }
-         
+        }
 
 
 
-         
 
-        
-       
-            $metaCollection = $document->find("//meta[@name='description']", Query::TYPE_XPATH);
-         
-          
-           if (count($metaCollection) > 0) {
-               $this->description = $metaCollection[0]->getAttribute('content');
-            }
 
-   
-            
 
-        
-  
-    
 
-     
-        
 
+        $metaCollection = $document->find("//meta[@name='description']", Query::TYPE_XPATH);
+
+
+        if (count($metaCollection) > 0) {
+            $this->description = $metaCollection[0]->getAttribute('content');
+        }
     }
 
     public function getUrlId(): string
@@ -205,8 +194,3 @@ class Check{
         return $this;
     }
 }
-
-
-
-
-
