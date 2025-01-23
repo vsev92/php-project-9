@@ -156,7 +156,8 @@ $app->post('/urls', function ($request, $response) use ($router) {
     } else {
 
         $params = ['inputValidation' => false, 'url' => $urlRaw];
-        return $this->get('renderer')->render($response, '/../templates/index.phtml', $params);
+        $newResponce = $response->withStatus(422);
+        return $this->get('renderer')->render($newResponce, '/../templates/index.phtml', $params);
 
     }
    
