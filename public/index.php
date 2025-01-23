@@ -99,19 +99,21 @@ $app->get('/urls', function ($request, $response, $args) {
 
 $app->get('/urls/{id}', function ($request, $response, $args) {
   
+
+    $id = $args['id'];
+    $siteDAO = $this->get(SiteDAO::class);
+    $site = $siteDAO->findById($id);
+    if(!isset($site)) {
+        $newResponce = $response->withStatus(404);
+        return $this->get('renderer')->render($newResponce, '/../templates/PageNotFound.phtml');
+    } 
+ 
+    $checkDAO = $this->get(CheckDAO::class);
+    $checks = $checkDAO->findChecksBySiteId($id);
+
     $messages = $this->get('flash')->getMessages();
     $messageType = array_keys($messages)[0];
     $message = $messages[$messageType][0];
-
-    $siteDAO = $this->get(SiteDAO::class);
-    $checkDAO = $this->get(CheckDAO::class);
- 
-   
-    $id = $args['id'];
-    $site = $siteDAO->findById($id);
-
-    
-    $checks = $checkDAO->findChecksBySiteId($id);
     $params = ['site' => $site, 'checks'=> $checks, 'flash' => $message, 'flashType' => $messageType];
 
     
