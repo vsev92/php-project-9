@@ -9,10 +9,8 @@ use DiDom\Document;
 use DiDom\Query;
 use illuminate\support;
 
-
 class Check
 {
-
     private string $urlId;
     private string $id;
     private string $statusCode;

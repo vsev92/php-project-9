@@ -137,7 +137,6 @@ $app->post('/urls', function ($request, $response) use ($router) {
                 $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
                 $id = $site->getId();
             } else {
-
                 return $this->get('renderer')->render($response, '/../templates/ServerError.phtml');
             }
         } else {
@@ -150,7 +149,6 @@ $app->post('/urls', function ($request, $response) use ($router) {
         $newResponce = $response->withRedirect($url);
         return $newResponce;
     } else {
-
         $params = ['inputValidation' => false, 'url' => $urlRaw];
         $newResponce = $response->withStatus(422);
         return $this->get('renderer')->render($newResponce, '/../templates/index.phtml', $params);

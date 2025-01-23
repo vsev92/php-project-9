@@ -4,11 +4,8 @@ namespace App;
 
 use Carbon\Carbon;
 
-
-
 class Site
 {
-
     private string $url;
     private string $id;
     private string $timestamp;
@@ -44,7 +41,7 @@ class Site
     }
 
 
-    function getUrl(): string
+    public function getUrl(): string
     {
         return $this->url;
     }

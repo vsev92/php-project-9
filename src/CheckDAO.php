@@ -6,10 +6,8 @@ use \PDO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-
 class CheckDAO
 {
-
     private PDO $conn;
 
     public function __construct(PDO $conn)
@@ -20,7 +18,10 @@ class CheckDAO
     public function save(Check $check): bool
     {
 
-        $sql = "INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = <<<SQL
+        INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)
+        VALUES (?, ?, ?, ?, ?, ?);
+        SQL;
         $stmt = $this->conn->prepare($sql);
 
         $id = (int)$check->getUrlId();

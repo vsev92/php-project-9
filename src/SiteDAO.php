@@ -6,10 +6,8 @@ use \PDO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-
 class SiteDAO
 {
-
     private PDO $conn;
 
     public function __construct(PDO $conn)

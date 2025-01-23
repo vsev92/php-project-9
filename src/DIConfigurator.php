@@ -2,11 +2,8 @@
 
 namespace App;
 
-
-
 class DIConfigurator
 {
-
     public function __construct()
     {
         $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
@@ -19,7 +16,7 @@ class DIConfigurator
         return (string)$_ENV['DATABASE_URL'];
     }
 
-    public  function getUrlForDbConnectorTest(): string
+    public function getUrlForDbConnectorTest(): string
     {
         return (string)$_ENV['DATABASE_URL_TEST'];
     }
