@@ -49,12 +49,12 @@ class Check
     {
         $client = new Client([
             'base_uri' => $url,
-            'timeout'  => 2.0,
+            'timeout'  => 3.0,
         ]);
         $response = $client->get($url);
         $code = $response->getStatusCode();
         $this->setStatusCode($code);
-        $body = (string)$response->getBody();
+        $body = (string)($response->getBody());
         $document = new Document($body);
         if ($document->has('title')) {
             $titlesCollection = $document->find('title');
