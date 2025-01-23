@@ -2,15 +2,14 @@
 
 namespace App;
 
-use \PDO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class CheckDAO
 {
-    private PDO $conn;
+    private \PDO $conn;
 
-    public function __construct(PDO $conn)
+    public function __construct(\PDO $conn)
     {
         $this->conn = $conn;
     }
@@ -50,7 +49,7 @@ class CheckDAO
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
 
-        $col = collect($stmt->fetchAll(PDO::FETCH_ASSOC));
+        $col = collect($stmt->fetchAll(\PDO::FETCH_ASSOC));
         $result = $col->map(function (array $checkRow, int $key) {
             return Check::fromFetchArray($checkRow);
         })->All();

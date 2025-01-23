@@ -2,15 +2,14 @@
 
 namespace App;
 
-use \PDO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class SiteDAO
 {
-    private PDO $conn;
+    private \PDO $conn;
 
-    public function __construct(PDO $conn)
+    public function __construct(\PDO $conn)
     {
         $this->conn = $conn;
     }
@@ -38,7 +37,7 @@ class SiteDAO
         $sql = file_get_contents(__DIR__ . '/scripts/selectAllSitesWithStatus.sql');
 
         $stmt = $this->conn->query($sql);
-        $col = collect($stmt->fetchAll(PDO::FETCH_ASSOC));
+        $col = collect($stmt->fetchAll(\PDO::FETCH_ASSOC));
 
         $result = $col->map(function (array $siteItem, int $key) {
 
@@ -57,7 +56,7 @@ class SiteDAO
         $sql = "SELECT * FROM urls WHERE name = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$url]);
-        $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fetched = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($fetched !== false) {
             return  Site::fromFetchArrayRow($fetched);
         }
@@ -69,7 +68,7 @@ class SiteDAO
         $sql = "SELECT * FROM urls WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
-        $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fetched = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($fetched !== false) {
             return  Site::fromFetchArrayRow($fetched);
         }
