@@ -115,13 +115,12 @@ $app->post('/urls', function ($request, $response) use ($router) {
             $id = $siteFromDB->getId();
         }
         $url = $router->urlFor('url', ['id' => $id]);
-        $newResponse = $response->withRedirect($url);
-        return $newResponse;
+        $newResponce = $response->withRedirect($url);
+        return $newResponce;
     } else {
         $params = ['inputValidation' => false, 'url' => $urlRaw];
-        //$newResponce = $response->withStatus(422);
-        //return $this->get('renderer')->render($newResponse, '/../templates/index.phtml', $params);
-        return $this->get('renderer')->render($response, '/../templates/index.phtml', $params);
+        $newResponce = $response->withStatus(422);
+        return $this->get('renderer')->render($newResponce, '/../templates/index.phtml', $params);
     }
 });
 
