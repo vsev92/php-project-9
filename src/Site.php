@@ -35,9 +35,13 @@ class Site
 
     }
 
-    public static function isUrlValid(string $url)
+    public static function isUrlValid(string $url) :bool
     {
-        return (filter_var($url, FILTER_VALIDATE_URL) !== false) && (mb_strlen($url)<=255);
+        $validator = new \Valitron\Validator(['urlValue'=>$url]);
+        $validator->rule('url', 'urlValue');
+        $validator->rule('lengthBetween', 'urlValue', 1, 255);
+        return $validator->validate();
+
 
     }
 
