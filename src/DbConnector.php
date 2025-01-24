@@ -25,9 +25,6 @@ class DbConnector
             $dbName = array_key_exists('path', $databaseUrl) ? ltrim($databaseUrl['path'], '/') : '';
             $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
             $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-            /*  if ($pdo === false) {
-                throw new Exception('Failed to connect to database');
-            }*/
             return $pdo;
         }
         throw new Exception('Failed to parse db URL');

@@ -24,8 +24,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 
-// connect to database
-
 
 session_start();
 
@@ -113,8 +111,12 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
     $checks = $checkDAO->findChecksBySiteId($id);
 
     $messages = $this->get('flash')->getMessages();
-    $messageType = array_keys($messages)[0];
-    $message = $messages[$messageType][0];
+    $message = '';
+    $messageType = '';
+    if (count($messages) > 0) {
+        $messageType = array_keys($messages)[0];
+        $message = $messages[$messageType][0];
+    }
     $params = ['site' => $site, 'checks' => $checks, 'flash' => $message, 'flashType' => $messageType];
 
 
