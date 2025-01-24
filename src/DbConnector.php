@@ -16,7 +16,7 @@ class DbConnector
 
     private function connect(string $dbUrl): \PDO
     {
-        $databaseUrl = (array)parse_url($dbUrl);
+        $databaseUrl = parse_url($dbUrl);
         $username = $databaseUrl['user'];
         $password = $databaseUrl['pass'];
         $host = $databaseUrl['host'];
@@ -24,7 +24,7 @@ class DbConnector
         $dbName = ltrim($databaseUrl['path'], '/');
         $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
         $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-        if (is_bool($pdo) && !$pdo) {
+        if ($pdo === false) {
             throw new Exception('Failed to connect to database');
         }
         return $pdo;

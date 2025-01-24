@@ -38,7 +38,7 @@ class CheckDAO
         $stmt->bindParam(6, $createdAt);
 
         $result = $stmt->execute();
-        $id = (int) $this->conn->lastInsertId();
+        $id = (string)$this->conn->lastInsertId();
         $check->setId($id);
         return $result;
     }

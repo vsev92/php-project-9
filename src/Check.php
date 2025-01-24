@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use DiDom\Document;
 use DiDom\Query;
+use DiDom\Element;
 use illuminate\support;
 
 class Check
