@@ -17,17 +17,20 @@ class DbConnector
     private function connect(string $dbUrl): \PDO
     {
         $databaseUrl = parse_url($dbUrl);
-        $username = $databaseUrl['user'];
-        $password = $databaseUrl['pass'];
-        $host = $databaseUrl['host'];
-        $port = array_key_exists('port', $databaseUrl) ? (string)$databaseUrl['port'] : '5432';
-        $dbName = ltrim($databaseUrl['path'], '/');
-        $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
-        $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-        if ($pdo === false) {
-            throw new Exception('Failed to connect to database');
+        if (is_array($databaseUrl)) {
+            $username = $databaseUrl['user'];
+            $password = $databaseUrl['pass'];
+            $host = $databaseUrl['host'];
+            $port = array_key_exists('port', $databaseUrl) ? (string)$databaseUrl['port'] : '5432';
+            $dbName = ltrim($databaseUrl['path'], '/');
+            $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
+            $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+            if ($pdo === false) {
+                throw new Exception('Failed to connect to database');
+            }
+            return $pdo;
         }
-        return $pdo;
+        throw new Exception('Failed to parse db URL');
     }
 
     private function getDbInitScript(): string
