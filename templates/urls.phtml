@@ -33,7 +33,7 @@
 
               <tr>
                 <td class="text-break"><?= htmlspecialchars($site->getId()) ?></td>
-                <td class="text-break"><?= htmlspecialchars($site->getUrl()) ?></td>
+                <td class="text-break"><a href="/urls/<?= htmlspecialchars($site->getId()) ?>"><?= htmlspecialchars($site->getUrl()) ?></a></td>
                 <td class="text-break"><?= htmlspecialchars($site->getTimestamp()) ?></td>
                 <td class="text-break"><?= htmlspecialchars($site->getLastStatusCode()) ?></td>
               </tr>
