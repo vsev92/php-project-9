@@ -1,6 +1,6 @@
 ### Page Analyzer
 
-## Free web service to analyzes web pages for SEO suitabilities
+## Free web service for analyzes web pages for SEO suitabilities
 
 ## Deployed on Render.com
 https://php-project-9-efdl.onrender.com

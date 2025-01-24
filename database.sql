@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.url_checks
             status_code int,
             h1 character varying(250),
             title character varying(250),
-            description character varying(250),
+            description character varying(1000),
             created_at timestamp  NOT NULL
        
         

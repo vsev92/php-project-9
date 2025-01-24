@@ -152,7 +152,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
         $newResponce = $response->withRedirect($url);
         return $newResponce;
     } else {
-        $params = ['inputValidation' => false, 'url' => $urlRaw];
+        $params = ['inputValid' => false, 'url' => $urlRaw];
         $newResponce = $response->withStatus(422);
         return $this->get('renderer')->render($newResponce, '/../templates/index.phtml', $params);
     }
