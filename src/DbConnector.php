@@ -11,7 +11,7 @@ class DbConnector
     public function __construct(string $dbUrl)
     {
         $this->conn = $this->connect($dbUrl);
-        $this->init();
+        $this->initTables();
     }
 
     private function connect(string $dbUrl): \PDO
@@ -39,12 +39,12 @@ class DbConnector
         return (string)$sqlSiteTableCreate;
     }
 
-    private function init()
+    private function initTables()
     {
-        $sql = getDbInitScript();
+        $sql = $this->getDbInitScript();
         $result = $this->conn->exec($sql);
         if ($result === false) {
-            throw new Exception('Failed to prepare Database');
+            throw new Exception('Failed to create database tables');
         }
     }
 

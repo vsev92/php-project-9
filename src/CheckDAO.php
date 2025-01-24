@@ -69,10 +69,11 @@ class CheckDAO
                 checks.created_at = (SELECT MAX(checks.created_at) FROM checks)
                 SQL;
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute($siteUrl);
-        if ($result = $stmt->fetch() !== false) {
-            return (string)$result['status_code'];
+        $stmt->execute([$siteUrl]);
+        $row = $stmt->fetch();
+        if ($row === false) {
+            return '';
         }
-        return '';
+        return (string)$row['status_code'];
     }
 }

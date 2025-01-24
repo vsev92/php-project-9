@@ -28,20 +28,20 @@ class Check
 
 
 
-    public static function fromFetchArray($arr)
+    public static function fromFetchArray(array $row)
     {
-        $check = new self($arr['url_id']);
-        $check->setId($arr['id'])
-            ->setStatusCode($arr['status_code'])
-            ->setH1($arr['h1'])
-            ->setTitle($arr['title'])
-            ->setDescription($arr['description'])
-            ->setCreatedAt($arr['created_at']);
+        $check = new self($row['url_id']);
+        $check->setId($row['id'])
+            ->setStatusCode($row['status_code'])
+            ->setH1($row['h1'])
+            ->setTitle($row['title'])
+            ->setDescription($row['description'])
+            ->setCreatedAt($row['created_at']);
         return $check;
     }
 
 
-    public function check($url)
+    public function check(string $url)
     {
         // try {
         $client = new Client([
@@ -53,10 +53,8 @@ class Check
 
 
         $response = $client->get($url);
-        $code = $response->getStatusCode(); // 200
-        //$reason = $response->getReasonPhrase(); // OK
-        $this->setStatusCode($code);
-
+        $code = $response->getStatusCode();
+        $this->setStatusCode((string)$code);
         $body = $response->getBody();
         $stringBody = (string) $body;
         $document = new Document($stringBody);
@@ -68,31 +66,29 @@ class Check
         if ($document->has('title')) {
             $titlesCollection = $document->find('title');
             if (count($titlesCollection) > 0) {
-                $this->title = $titlesCollection[0]->text();
+                $title = $titlesCollection[0];
+                $this->title = $title->text();
             }
         }
-
 
 
         if ($document->has('h1')) {
             $h1Collection =  $document->find('h1');
             if (count($h1Collection) > 0) {
-                $this->h1 = $h1Collection[0]->text();
+                $h1 = $h1Collection[0];
+                $this->h1 = $h1->text();
             }
         }
-
-
-
-
-
-
 
 
         $metaCollection = $document->find("//meta[@name='description']", Query::TYPE_XPATH);
 
 
         if (count($metaCollection) > 0) {
-            $this->description = $metaCollection[0]->getAttribute('content');
+            $meta = $metaCollection[0];
+            if ($meta->hasAttribute('content')) {
+                $this->description = (string)$meta->getAttribute('content');
+            }
         }
     }
 
