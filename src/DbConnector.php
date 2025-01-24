@@ -18,16 +18,16 @@ class DbConnector
     {
         $databaseUrl = parse_url($dbUrl);
         if (is_array($databaseUrl)) {
-            $username = $databaseUrl['user'];
-            $password = $databaseUrl['pass'];
-            $host = $databaseUrl['host'];
+            $username = array_key_exists('user', $databaseUrl) ? $databaseUrl['user'] : '';
+            $password = array_key_exists('pass', $databaseUrl) ? $databaseUrl['pass'] : '';
+            $host = array_key_exists('host', $databaseUrl) ? $databaseUrl['host'] : '';
             $port = array_key_exists('port', $databaseUrl) ? (string)$databaseUrl['port'] : '5432';
-            $dbName = ltrim($databaseUrl['path'], '/');
+            $dbName = array_key_exists('path', $databaseUrl) ? ltrim($databaseUrl['path'], '/') : '';
             $dsn = "pgsql:host={$host};port={$port};dbname={$dbName};";
             $pdo = new \PDO($dsn, $username, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-            if ($pdo === false) {
+            /*  if ($pdo === false) {
                 throw new Exception('Failed to connect to database');
-            }
+            }*/
             return $pdo;
         }
         throw new Exception('Failed to parse db URL');
