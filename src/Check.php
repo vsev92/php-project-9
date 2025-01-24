@@ -45,14 +45,10 @@ class Check
 
     public function check(string $url)
     {
-        // try {
         $client = new Client([
             'base_uri' => $url,
             'timeout'  => 2.0,
         ]);
-
-
-
 
         $response = $client->get($url);
         $code = $response->getStatusCode();
@@ -61,10 +57,6 @@ class Check
         $stringBody = (string) $body;
         $document = new Document($stringBody);
 
-
-
-
-
         if ($document->has('title')) {
             $titlesCollection = $document->find('title');
             if (count($titlesCollection) > 0) {
@@ -72,7 +64,6 @@ class Check
                 $this->title = $title instanceof  \DiDom\Element ? $title->text() : '';
             }
         }
-
 
         if ($document->has('h1')) {
             $h1Collection =  $document->find('h1');

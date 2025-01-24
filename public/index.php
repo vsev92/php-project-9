@@ -82,9 +82,11 @@ $app->get('/', function ($request, $response, $args) {
 $app->get('/urls', function ($request, $response, $args) {
 
     $messages = $this->get('flash')->getMessages();
-    $messageType = array_keys($messages)[0];
-    $message = $messages[$messageType][0];
-
+    $message = '';
+    if (count($messages) > 0) {
+        $messageType = array_keys($messages)[0];
+        $message = $messages[$messageType][0];
+    }
 
     $siteDAO = $this->get(SiteDAO::class);
     $sites = $siteDAO->getAll();
