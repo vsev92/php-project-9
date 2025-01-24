@@ -68,8 +68,8 @@ class Check
         if ($document->has('title')) {
             $titlesCollection = $document->find('title');
             if (count($titlesCollection) > 0) {
-                $title = $titlesCollection[0];
-                $this->title = $title->text();
+                $title = ($titlesCollection[0]);
+                $this->title = $title instanceof \Element ? $title->text() : '';
             }
         }
 
@@ -78,7 +78,8 @@ class Check
             $h1Collection =  $document->find('h1');
             if (count($h1Collection) > 0) {
                 $h1 = $h1Collection[0];
-                $this->h1 = $h1->text();
+                $this->h1 = $h1 instanceof \Element ? $h1->text() : '';
+                //$this->h1 = $h1->text();
             }
         }
 
