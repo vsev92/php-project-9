@@ -83,6 +83,7 @@ $app->get('/urls', function ($request, $response, $args) {
 
     $messages = $this->get('flash')->getMessages();
     $message = '';
+    $messageType = '';
     if (count($messages) > 0) {
         $messageType = array_keys($messages)[0];
         $message = $messages[$messageType][0];
