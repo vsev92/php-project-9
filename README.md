@@ -26,8 +26,8 @@ https://php-project-9-efdl.onrender.com
 
 ## Setup project
 ```bash
-git https://github.com/vsev92/php-project-48.git
-cd  php-project-48
+git clone git@github.com:vsev92/php-project-9.git
+cd  php-project-9
 make install
 make start
 ```

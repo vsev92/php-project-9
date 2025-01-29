@@ -26,12 +26,11 @@ session_start();
 
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
-$dbUrl = (string)$_ENV['DATABASE_URL'];
 
 
-$container->set(DbConnector::class, function () use ($dbUrl) {
+$container->set(DbConnector::class, function () {
 
-
+    $dbUrl = (string)$_ENV['DATABASE_URL'];
     return new DbConnector($dbUrl);
 });
 
@@ -61,7 +60,7 @@ $app->addErrorMiddleware(true, true, true);
 
 
 
-//////////
+
 $router = $app->getRouteCollector()->getRouteParser();
 
 
@@ -126,8 +125,6 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
     $aUrl = $request->getParsedBody()['url'];
     $urlRaw = $aUrl['name'];
-    //dump($urlRaw);
-    //dump(Site::isUrlValid($urlRaw));
     if (Site::isUrlValid($urlRaw)) {
         $site = new Site($urlRaw);
         $siteDAO = $this->get(SiteDAO::class);
