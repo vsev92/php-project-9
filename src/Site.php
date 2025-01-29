@@ -34,10 +34,28 @@ class Site
 
     public static function isUrlValid(string $url): bool
     {
+
+
+        /*
+        \Valitron\Validator::addRule('notEmptyString', function ($field, $value, array $params, array $fields) {
+            return $value !== "";
+        }, 'String is empty');*/
+
         $validator = new \Valitron\Validator(['urlValue' => $url]);
+
         $validator->rule('url', 'urlValue');
+
         $validator->rule('lengthBetween', 'urlValue', 1, 255);
-        return $validator->validate();
+        /*
+        $validator::addRule('notEmptyString', function ($field, $value, array $params, array $fields) {
+            return $value !== "";
+        }, 'String is empty');
+
+        $validator->rule('notEmptyString', 'urlValue');
+
+        dump($validator->validate() && $url !== '');*/
+
+        return $validator->validate() && $url !== '';
     }
 
 

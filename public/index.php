@@ -19,26 +19,21 @@ require __DIR__ . '/../vendor/autoload.php';
 
 
 
-
-
-
 $container = new Container();
 
 
 session_start();
 
-$container->set(DIConfigurator::class, function () {
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+$dbUrl = (string)$_ENV['DATABASE_URL'];
 
 
-    return new DIConfigurator();
+$container->set(DbConnector::class, function () use ($dbUrl) {
+
+
+    return new DbConnector($dbUrl);
 });
-
-$container->set(DbConnector::class, function (DIConfigurator $dic) {
-
-    $url = $dic->getUrlForDbConnector();
-    return new DbConnector($url);
-});
-
 
 $container->set(SiteDAO::class, function (DbConnector $dbc) {
 
@@ -131,8 +126,8 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
     $aUrl = $request->getParsedBody()['url'];
     $urlRaw = $aUrl['name'];
-
-
+    //dump($urlRaw);
+    //dump(Site::isUrlValid($urlRaw));
     if (Site::isUrlValid($urlRaw)) {
         $site = new Site($urlRaw);
         $siteDAO = $this->get(SiteDAO::class);

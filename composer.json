@@ -1,6 +1,6 @@
 {
     "name": "hexlet/code",
-    "type": "library",
+    "type": "project",
     "license": "MIT",
     "description" : "Web Pages Analyzer service",
     "autoload": {
