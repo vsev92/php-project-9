@@ -20,15 +20,24 @@ https://php-project-9-efdl.onrender.com
 * Make
 * PostgeSQL
 
-## Setup database
-1. create empty PostgreSql database
-2. add database URL to enviroment variable DATABASE_URL
-
 ## Setup project
 ```bash
 git clone git@github.com:vsev92/php-project-9.git
 cd  php-project-9
 make install
+```
+## Setup database
+1. create empty PostgreSql database
+2. Copy .env file with variable 'DATABASE_URL' from .env.example
+## 
+```bash
+cd  php-project-9/public
+cp .env.example .env
+```
+3. modify variable 'DATABASE_URL' in .env  file to actual URL for connect to created at step 1 database 
+
+## Run web server
+```bash
 make start
 ```
 then web service is avaible on 0.0.0.0:8000
