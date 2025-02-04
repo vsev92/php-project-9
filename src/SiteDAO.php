@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class SiteDAO
 {
@@ -52,18 +51,12 @@ class SiteDAO
 
         $stmt = $this->conn->query($sql);
         $col = collect($stmt->fetchAll(\PDO::FETCH_ASSOC));
-
         $result = $col->map(function (array $siteItem, int $key) {
-
-
             return Site::fromFetchArrayRow($siteItem);
         })->All();
 
-
-
         return $result;
     }
-
 
     public function findByName(string $name)
     {

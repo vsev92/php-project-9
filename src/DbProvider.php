@@ -4,17 +4,9 @@ namespace App;
 
 use Exception;
 
-class DbConnector
+class DbProvider
 {
-    private \PDO $conn;
-
-    public function __construct(string $dbUrl)
-    {
-        $this->conn = $this->connect($dbUrl);
-        $this->initTables();
-    }
-
-    private function connect(string $dbUrl): \PDO
+    public static function fromDbUrl(string $dbUrl): \PDO
     {
         $databaseUrl = parse_url($dbUrl);
         if (is_array($databaseUrl)) {
@@ -30,27 +22,21 @@ class DbConnector
         throw new Exception('Failed to parse db URL');
     }
 
-    private function getDbInitScript(): string
+    private static function getMigrateScript(): string
     {
-        $sqlSiteTableCreate = file_get_contents(__DIR__ . '/../database.sql');
-        if ($sqlSiteTableCreate === false) {
+        $sqMigrateScript = file_get_contents(__DIR__ . '/../database.sql');
+        if ($sqMigrateScript === false) {
             throw new Exception('Failed to read Database initial script');
         }
-        return (string)$sqlSiteTableCreate;
+        return $sqMigrateScript;
     }
 
-    private function initTables()
+    public static function migrate(\PDO $conn)
     {
-        $sql = $this->getDbInitScript();
-        $result = $this->conn->exec($sql);
+        $sql = self::getMigrateScript();
+        $result = $conn->exec($sql);
         if ($result === false) {
-            throw new Exception('Failed to create database tables');
+            throw new Exception('Failed to migrate tables');
         }
-    }
-
-
-    public function getConnection(): \PDO
-    {
-        return $this->conn;
     }
 }

@@ -11,7 +11,6 @@ class Site
     private string $timestamp;
     private string $lastStatusCode;
 
-
     public function __construct(string $url)
     {
         $this->timestamp = Carbon::now()->format('Y-m-d H:i:s');
@@ -34,16 +33,10 @@ class Site
 
     public static function isUrlValid(string $url): bool
     {
-
         $validator = new \Valitron\Validator(['urlValue' => $url]);
-
         $validator->rule('required', 'urlValue');
-
         $validator->rule('url', 'urlValue');
-
         $validator->rule('lengthBetween', 'urlValue', 1, 255);
-
-
         return $validator->validate();
     }
 
@@ -61,7 +54,6 @@ class Site
     public function setId(string $id): self
     {
         $this->id = $id;
-
         return $this;
     }
 
@@ -73,7 +65,6 @@ class Site
     public function setTimestamp(string $timestamp): self
     {
         $this->timestamp = $timestamp;
-
         return $this;
     }
 
@@ -85,7 +76,6 @@ class Site
     public function setLastStatusCode(string $statusCode): self
     {
         $this->lastStatusCode = $statusCode;
-
         return $this;
     }
 }
