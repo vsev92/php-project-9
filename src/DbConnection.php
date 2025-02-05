@@ -4,7 +4,7 @@ namespace App;
 
 use Exception;
 
-class DbProvider
+class DbConnection
 {
     public static function fromDbUrl(string $dbUrl): \PDO
     {
@@ -20,23 +20,5 @@ class DbProvider
             return $pdo;
         }
         throw new Exception('Failed to parse db URL');
-    }
-
-    private static function getMigrateScript(): string
-    {
-        $sqMigrateScript = file_get_contents(__DIR__ . '/../database.sql');
-        if ($sqMigrateScript === false) {
-            throw new Exception('Failed to read Database initial script');
-        }
-        return $sqMigrateScript;
-    }
-
-    public static function migrate(\PDO $conn)
-    {
-        $sql = self::getMigrateScript();
-        $result = $conn->exec($sql);
-        if ($result === false) {
-            throw new Exception('Failed to migrate tables');
-        }
     }
 }

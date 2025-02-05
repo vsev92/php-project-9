@@ -8,7 +8,8 @@ use App\SiteDAO;
 use App\Site;
 use App\CheckDAO;
 use App\Check;
-use App\DbProvider;
+use App\DbConnection;
+use App\DbMigrator;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ClientException;
 
@@ -23,8 +24,8 @@ $dotenv->safeLoad();
 
 $container->set(\PDO::class, function () {
     $dbUrl = (string)$_ENV['DATABASE_URL'];
-    $conn =  DbProvider::fromDbUrl($dbUrl);
-    DbProvider::migrate($conn);
+    $conn =  DbConnection::fromDbUrl($dbUrl);
+    DbMigrator::migrate($conn);
     return $conn;
 });
 
