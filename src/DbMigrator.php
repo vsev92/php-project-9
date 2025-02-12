@@ -2,6 +2,7 @@
 
 namespace App;
 
+use PDO;
 use Exception;
 
 class DbMigrator
@@ -15,7 +16,7 @@ class DbMigrator
         return $sqMigrateScript;
     }
 
-    public static function migrate(\PDO $conn)
+    public static function migrate(PDO $conn)
     {
         $sql = self::getMigrateScript();
         $result = $conn->exec($sql);

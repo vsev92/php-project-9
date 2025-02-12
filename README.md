@@ -31,7 +31,6 @@ make install
 2. Copy .env file with variable 'DATABASE_URL' from .env.example
 ## 
 ```bash
-cd  php-project-9/public
 cp .env.example .env
 ```
 3. modify variable 'DATABASE_URL' in .env  file to actual URL for connect to created at step 1 database 

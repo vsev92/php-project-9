@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Slim\Factory\AppFactory;
+use Slim\Views\PhpRenderer;
+use Slim\Flash\Messages;
 use DI\Container;
 use App\SiteDAO;
 use App\Site;
@@ -12,30 +14,30 @@ use App\DbConnection;
 use App\DbMigrator;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ClientException;
+use Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 
 session_start();
-
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable((__DIR__ . '/..'));
 $dotenv->safeLoad();
 
-$container->set(\PDO::class, function () {
+$container->set(PDO::class, function () {
     $dbUrl = (string)$_ENV['DATABASE_URL'];
     $conn =  DbConnection::fromDbUrl($dbUrl);
-    DbMigrator::migrate($conn);
     return $conn;
 });
 
-$container->set(SiteDAO::class, fn(\PDO $conn) => new SiteDAO($conn));
+$conn = $container->get(PDO::class);
+DbMigrator::migrate($conn);
 
-$container->set(CheckDAO::class, fn(\PDO $conn) => new CheckDAO($conn));
+$container->set(CheckDAO::class, fn(PDO $conn) => new CheckDAO($conn));
 
-$container->set('renderer', fn() => new \Slim\Views\PhpRenderer(__DIR__ . '/../templates'));
+$container->set('renderer', fn() => new PhpRenderer(__DIR__ . '/../templates'));
 
-$container->set('flash', fn() => new \Slim\Flash\Messages());
+$container->set('flash', fn() => new Messages());
 
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);

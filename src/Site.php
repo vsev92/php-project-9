@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Valitron\Validator;
 
 class Site
 {
@@ -33,7 +34,7 @@ class Site
 
     public static function isUrlValid(string $url): bool
     {
-        $validator = new \Valitron\Validator(['urlValue' => $url]);
+        $validator = new Validator(['urlValue' => $url]);
         $validator->rule('required', 'urlValue');
         $validator->rule('url', 'urlValue');
         $validator->rule('lengthBetween', 'urlValue', 1, 255);
