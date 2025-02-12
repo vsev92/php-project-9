@@ -1,41 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php require '_head.phtml' ?>
-
-<body class="min-vh-100 d-flex flex-column">
-  <?php require '_header.phtml' ?>
-  <div class="alert alert-<?= $flashType ?>" role="alert">
-    <?= htmlspecialchars($flash) ?>
-  </div>
+<?= $this->fetch('_header.phtml', ['navlinks' => $navlinks]) ?>
+<div class="alert alert-<?= $flashType ?>" role="alert">
   <?= htmlspecialchars($flash) ?>
-  <main class="flex-grow-1">
-    <div class="container-lg mt-3">
-      <h1>Сайты</h1>
-      <div class="table-responsive">
-        <table class="table table-bordered  table-hover text-nowrap" data-test="urls">
-          <thead>
+</div>
+<?= htmlspecialchars($flash) ?>
+<main class="flex-grow-1">
+  <div class="container-lg mt-3">
+    <h1>Сайты</h1>
+    <div class="table-responsive">
+      <table class="table table-bordered  table-hover text-nowrap" data-test="urls">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Последняя проверка</th>
+            <th>Код ответа</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($sites as $site): ?>
             <tr>
-              <th>ID</th>
-              <th>Имя</th>
-              <th>Последняя проверка</th>
-              <th>Код ответа</th>
+              <td class="text-break"><?= htmlspecialchars($site->getId()) ?></td>
+              <td class="text-break"><a href="/urls/<?= htmlspecialchars($site->getId()) ?>"><?= htmlspecialchars($site->getUrl()) ?></a></td>
+              <td class="text-break"><?= htmlspecialchars($site->getTimestamp()) ?></td>
+              <td class="text-break"><?= htmlspecialchars($site->getLastStatusCode()) ?></td>
             </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($sites as $site): ?>
-              <tr>
-                <td class="text-break"><?= htmlspecialchars($site->getId()) ?></td>
-                <td class="text-break"><a href="/urls/<?= htmlspecialchars($site->getId()) ?>"><?= htmlspecialchars($site->getUrl()) ?></a></td>
-                <td class="text-break"><?= htmlspecialchars($site->getTimestamp()) ?></td>
-                <td class="text-break"><?= htmlspecialchars($site->getLastStatusCode()) ?></td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-  </main>
-  <?php require '_footer.phtml' ?>
-</body>
-
-</html>
+  </div>
+</main>
+<?= $this->fetch('_footer.phtml') ?>

@@ -1,73 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php require '_head.phtml' ?>
-
-<body class="min-vh-100 d-flex flex-column">
-  <?php require '_header.phtml' ?>
-  <div class="alert alert-<?= $flashType ?>" role="alert">
-    <?= htmlspecialchars($flash) ?>
-  </div>
-  <main class="flex-grow-1">
-    <div class="container-lg mt-3">
-      <row>
-        <h1>Сайт <?= htmlspecialchars($site->getUrl()) ?></h1>
-      </row>
-      <div class="row">
-        <div class="table-responsive">
-          <table class="table table-bordered  table-hover text-nowrap" data-test="url">
-            </thead>
-            <tbody>
-              <tr>
-                <td>ID</td>
-                <td><?= htmlspecialchars($site->getId()) ?></td>
-              </tr>
-              <tr>
-                <td>Имя</td>
-                <td><?= htmlspecialchars($site->getUrl()) ?></td>
-              </tr>
-              <tr>
-                <td>Дата создания</td>
-                <td><?= htmlspecialchars($site->getTimestamp()) ?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <form method="post" action="/urls/<?= $site->getId() ?>/checks">
-          <input type="submit" class="btn btn-primary" value="Запустить проверку">
-        </form>
-        <div class="table-responsive mt-3">
-          <table class="table table-bordered table-hover" data-test="checks">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Код ответа</th>
-                <th>h1</th>
-                <th>title</th>
-                <th>description</th>
-                <th>Дата создания</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($checks as $check): ?>
-
-                <tr>
-                  <td><?= htmlspecialchars($check->getId()) ?></td>
-                  <td><?= htmlspecialchars($check->getStatusCode()) ?></td>
-                  <td class="text-break"><?= htmlspecialchars($check->getH1()) ?></td>
-                  <td class="text-break"><?= htmlspecialchars($check->getTitle()) ?></td>
-                  <td class="text-break"><?= htmlspecialchars($check->getDescription()) ?></td>
-                  <td class="text-break"><?= htmlspecialchars($check->getCreatedAt()) ?></td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
+<?= $this->fetch('_header.phtml', ['navlinks' => $navlinks]) ?>
+<div class="alert alert-<?= $flashType ?>" role="alert">
+  <?= htmlspecialchars($flash) ?>
+</div>
+<main class="flex-grow-1">
+  <div class="container-lg mt-3">
+    <row>
+      <h1>Сайт <?= htmlspecialchars($site->getUrl()) ?></h1>
+    </row>
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table table-bordered  table-hover text-nowrap" data-test="url">
+          </thead>
+          <tbody>
+            <tr>
+              <td>ID</td>
+              <td><?= htmlspecialchars($site->getId()) ?></td>
+            </tr>
+            <tr>
+              <td>Имя</td>
+              <td><?= htmlspecialchars($site->getUrl()) ?></td>
+            </tr>
+            <tr>
+              <td>Дата создания</td>
+              <td><?= htmlspecialchars($site->getTimestamp()) ?></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </main>
-  <?php require '_footer.phtml' ?>
-</body>
+    <div class="row">
+      <form method="post" action="/urls/<?= $site->getId() ?>/checks">
+        <input type="submit" class="btn btn-primary" value="Запустить проверку">
+      </form>
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover" data-test="checks">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Код ответа</th>
+              <th>h1</th>
+              <th>title</th>
+              <th>description</th>
+              <th>Дата создания</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($checks as $check): ?>
 
-</html>
+              <tr>
+                <td><?= htmlspecialchars($check->getId()) ?></td>
+                <td><?= htmlspecialchars($check->getStatusCode()) ?></td>
+                <td class="text-break"><?= htmlspecialchars($check->getH1()) ?></td>
+                <td class="text-break"><?= htmlspecialchars($check->getTitle()) ?></td>
+                <td class="text-break"><?= htmlspecialchars($check->getDescription()) ?></td>
+                <td class="text-break"><?= htmlspecialchars($check->getCreatedAt()) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<?= $this->fetch('_footer.phtml') ?>

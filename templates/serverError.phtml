@@ -1,22 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php require '_head.phtml' ?>
-
-<body class="min-vh-100 d-flex flex-column">
-  <?php require '_header.phtml' ?>
-  <main class="flex-grow-1">
-    <div class="container-lg mt-3">
-      <h1>Упс что-то пошло не так</h1>
-      <div class="row row-cols-1 row-cols-lg-2 align-items-lg-center">
-        <div class="col">
-          <h2 class="h2 mb-4">
-            Ошибка 500
-          </h2>
-        </div>
+<?= $this->fetch('_header.phtml', ['navlinks' => $navlinks]) ?>
+<main class="flex-grow-1">
+  <div class="container-lg mt-3">
+    <h1>Упс что-то пошло не так</h1>
+    <div class="row row-cols-1 row-cols-lg-2 align-items-lg-center">
+      <div class="col">
+        <h2 class="h2 mb-4">
+          Ошибка 500
+        </h2>
       </div>
     </div>
-  </main>
-  <?php require '_footer.phtml' ?>
-</body>
-
-</html>
+  </div>
+</main>
+<?= $this->fetch('_footer.phtml') ?>

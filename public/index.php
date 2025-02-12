@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use Slim\Flash\Messages;
@@ -44,9 +42,10 @@ $app->addErrorMiddleware(true, true, true);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response, $args) {
-    $params = ['inputValid' => true];
+    $navlinks = ['main' => 'active', 'sites' => ''];
+    $params = ['isInputValid' => true, 'navlinks' => $navlinks];
     return $this->get('renderer')->render($response, 'index.phtml', $params);
-})->setName('home');
+})->setName('index');
 
 $app->get('/urls', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
@@ -58,7 +57,8 @@ $app->get('/urls', function ($request, $response, $args) {
     }
     $siteDAO = $this->get(SiteDAO::class);
     $sites = $siteDAO->getAll();
-    $params = ['sites' => $sites, 'flash' => $message, 'flashType' => $messageType];
+    $navlinks = ['main' => '', 'sites' => 'active'];
+    $params = ['sites' => $sites, 'flash' => $message, 'flashType' => $messageType, 'navlinks' => $navlinks];
     return $this->get('renderer')->render($response, 'urls.phtml', $params);
 })->setName('urls');
 
@@ -79,7 +79,8 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
         $messageType = array_keys($messages)[0];
         $message = $messages[$messageType][0];
     }
-    $params = ['site' => $site, 'checks' => $checks, 'flash' => $message, 'flashType' => $messageType];
+    $navlinks = ['main' => '', 'sites' => 'active'];
+    $params = ['site' => $site, 'checks' => $checks, 'flash' => $message, 'flashType' => $messageType, 'navlinks' => $navlinks];
     return $this->get('renderer')->render($response, 'url.phtml', $params);
 })->setName('url');
 
@@ -105,7 +106,8 @@ $app->post('/urls', function ($request, $response) use ($router) {
         $newResponce = $response->withRedirect($url);
         return $newResponce;
     } else {
-        $params = ['inputValid' => false, 'url' => $urlRaw];
+        $navlinks = ['main' => 'active', 'sites' => ''];
+        $params = ['isInputValid' => false, 'url' => $urlRaw, 'navlinks' => $navlinks];
         $newResponce = $response->withStatus(422);
         return $this->get('renderer')->render($newResponce, 'index.phtml', $params);
     }
