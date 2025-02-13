@@ -23,14 +23,10 @@ session_start();
 $dotenv = Dotenv::createImmutable((__DIR__ . '/..'));
 $dotenv->safeLoad();
 
-$container->set(PDO::class, function () {
-    $dbUrl = (string)$_ENV['DATABASE_URL'];
-    $conn =  DbConnection::fromDbUrl($dbUrl);
-    return $conn;
-});
-
-$conn = $container->get(PDO::class);
+$dbUrl = (string)$_ENV['DATABASE_URL'];
+$conn = DbConnection::fromDbUrl($dbUrl);
 DbMigrator::migrate($conn);
+$container->set(PDO::class, fn() => $conn);
 
 $container->set(CheckDAO::class, fn(PDO $conn) => new CheckDAO($conn));
 
@@ -43,7 +39,7 @@ $app = AppFactory::createFromContainer($container);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response, $args) {
-    $params = ['isInputValid' => true, 'activeNavlink' => 'main'];
+    $params = ['isInputValid' => true];
     return $this->get('renderer')->render($response, 'index.phtml', $params);
 })->setName('index');
 
@@ -51,7 +47,7 @@ $app->get('/urls', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
     $siteDAO = $this->get(SiteDAO::class);
     $sites = $siteDAO->getAll();
-    $params = ['sites' => $sites, 'flashMessages' => $messages, 'activeNavlink' => 'sites'];
+    $params = ['sites' => $sites, 'flashMessages' => $messages];
     return $this->get('renderer')->render($response, 'urls.phtml', $params);
 })->setName('urls');
 
@@ -91,7 +87,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
         $newResponse = $response->withRedirect($url);
         return $newResponse;
     } else {
-        $params = ['isInputValid' => false, 'url' => $urlRaw, 'activeNavlink' => 'main'];
+        $params = ['isInputValid' => false, 'url' => $urlRaw];
         $newResponse = $response->withStatus(422);
         return $this->get('renderer')->render($newResponse, 'index.phtml', $params);
     }

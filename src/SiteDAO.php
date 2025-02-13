@@ -19,8 +19,6 @@ class SiteDAO
         $timestamp = $site->getTimestamp();
         $sql = "INSERT INTO urls(name, created_at) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $url = $site->getUrl();
-        $timestamp = $site->getTimestamp();
         $stmt->bindParam(1, $url);
         $stmt->bindParam(2, $timestamp);
         $result = $stmt->execute();
