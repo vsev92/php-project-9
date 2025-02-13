@@ -15,24 +15,29 @@ class CheckDAO
 
     public function save(Check $check): bool
     {
-        $sql = <<<SQL
-        INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)
-        VALUES (?, ?, ?, ?, ?, ?);
-        SQL;
-        $stmt = $this->conn->prepare($sql);
         $id = (int)$check->getUrlId();
         $statusCode = (int)$check->getStatusCode();
         $h1 = $check->getH1();
         $title = $check->getTitle();
         $description = $check->getDescription();
         $createdAt = $check->getCreatedAt();
-        $stmt->bindParam(1, $id);
-        $stmt->bindParam(2, $statusCode);
-        $stmt->bindParam(3, $h1);
-        $stmt->bindParam(4, $title);
-        $stmt->bindParam(5, $description);
-        $stmt->bindParam(6, $createdAt);
-        $result = $stmt->execute();
+
+        $sql = <<<SQL
+        INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)
+        VALUES (:id, :statusCode, :h1, :title, :description, :createdAt);
+        SQL;
+        $result = $this->conn
+            ->prepare($sql)
+            ->execute(
+                [
+                    'id' => $id,
+                    'statusCode' => $statusCode,
+                    'h1' => $h1,
+                    'title' => $title,
+                    'description' => $description,
+                    'createdAt' => $createdAt
+                ]
+            );
         $id = (string)$this->conn->lastInsertId();
         $check->setId($id);
         return $result;
@@ -40,9 +45,9 @@ class CheckDAO
 
     public function findChecksBySiteId(string $id)
     {
-        $sql = "SELECT * FROM url_checks WHERE url_id = ?";
+        $sql = "SELECT * FROM url_checks WHERE url_id = :id";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$id]);
+        $stmt->execute(['id' => $id]);
         $col = collect($stmt->fetchAll(PDO::FETCH_ASSOC));
         $result = $col->map(function (array $checkRow, int $key) {
             return Check::fromFetchArray($checkRow);

@@ -17,11 +17,15 @@ class SiteDAO
     {
         $url = $site->getUrl();
         $timestamp = $site->getTimestamp();
-        $sql = "INSERT INTO urls(name, created_at) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(1, $url);
-        $stmt->bindParam(2, $timestamp);
-        $result = $stmt->execute();
+        $sql = "INSERT INTO urls(name, created_at) VALUES (:name, :cratedAt)";
+        $result = $this->conn
+            ->prepare($sql)
+            ->execute(
+                [
+                    'name' => $url,
+                    'cratedAt' => $timestamp,
+                ]
+            );
         $id = (string)$this->conn->lastInsertId();
         $site->setId($id);
         return $result;
@@ -58,9 +62,9 @@ class SiteDAO
 
     public function findByName(string $name)
     {
-        $sql = "SELECT * FROM urls WHERE name = ?";
+        $sql = "SELECT * FROM urls WHERE name = :name";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$name]);
+        $stmt->execute(['name' => $name]);
         $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($fetched !== false) {
             return  Site::fromFetchArrayRow($fetched);
@@ -70,9 +74,9 @@ class SiteDAO
 
     public function findById(string $id)
     {
-        $sql = "SELECT * FROM urls WHERE id = ?";
+        $sql = "SELECT * FROM urls WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$id]);
+        $stmt->execute(['id' => $id]);
         $fetched = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($fetched !== false) {
             return  Site::fromFetchArrayRow($fetched);
