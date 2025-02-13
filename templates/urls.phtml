@@ -1,8 +1,4 @@
-<?= $this->fetch('_header.phtml', ['navlinks' => $navlinks]) ?>
-<div class="alert alert-<?= $flashType ?>" role="alert">
-  <?= htmlspecialchars($flash) ?>
-</div>
-<?= htmlspecialchars($flash) ?>
+<?= $this->fetch('_header.phtml', ['activeNavlink' => $activeNavlink]) ?>
 <main class="flex-grow-1">
   <div class="container-lg mt-3">
     <h1>Сайты</h1>

@@ -1,0 +1,13 @@
+<?php
+$messageTypes = array_keys($flashMessages);
+foreach ($messageTypes as $type):
+    $messagesByType = $flashMessages[$type];
+    foreach ($messagesByType as $messageText):
+?>
+        <div class="alert alert-<?= $type ?>" role="alert">
+            <?= htmlspecialchars($messageText) ?>
+        </div>
+<?php
+    endforeach;
+endforeach;
+?>
