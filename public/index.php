@@ -15,7 +15,6 @@ use Dotenv\Dotenv;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
-
 require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
