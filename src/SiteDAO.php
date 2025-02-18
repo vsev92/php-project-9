@@ -26,7 +26,7 @@ class SiteDAO
                     'createdAt' => $timestamp,
                 ]
             );
-        $id = (string)$this->conn->lastInsertId();
+        $id = (int)$this->conn->lastInsertId();
         $site->setId($id);
         return $result;
     }

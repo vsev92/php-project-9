@@ -50,10 +50,7 @@ class Check
         $body = $response->getBody();
         $stringBody = (string) $body;
         $document = new Document($stringBody);
-        $title = $document->first('title');
-        $this->title = $title?->text();
-        $h1 = $document->first('h1');
-        $this->h1 = $h1?->text();
+        $this->h1 = $document->first('h1')?->text();
         $meta = $document->first('meta[name=description]');
         $this->description = (string)$meta?->getAttribute('content');
     }

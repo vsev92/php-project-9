@@ -38,7 +38,7 @@ class CheckDAO
                     'createdAt' => $createdAt
                 ]
             );
-        $id = (string)$this->conn->lastInsertId();
+        $id = (int)$this->conn->lastInsertId();
         $check->setId($id);
         return $result;
     }
