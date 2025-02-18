@@ -57,6 +57,11 @@ class CheckDAO
 
     public function getLastChekStatusCode(string $siteUrl): string
     {
+        /*
+        Николай, привет. Не знаю как с тобой связаться, поэтому пишу здесь.
+        По замечаниям к проекту: у меня нет понимания, как можно упростить запрос ниже.
+        Буду благодарен если подскажешь<div class="
+        */
         $sql =  <<<SQL
                 WITH checks as (
                 SELECT c.status_code, c .created_at

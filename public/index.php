@@ -22,7 +22,7 @@ $container = new Container();
 $app = AppFactory::createFromContainer($container);
 
 //Errors handlers
-/*
+
 $httpNotFoundExceptionHandler = function (
     ServerRequestInterface $request,
     HttpNotFoundException $exception,
@@ -46,7 +46,7 @@ $defaultExceptionHandler = function (
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setErrorHandler(HttpNotFoundException::class, $httpNotFoundExceptionHandler);
 $errorMiddleware->setDefaultErrorHandler($defaultExceptionHandler);
-*/
+
 session_start();
 $dotenv = Dotenv::createImmutable((__DIR__ . '/..'));
 $dotenv->safeLoad();

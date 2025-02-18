@@ -11,7 +11,7 @@ use DiDom\Element;
 class Check
 {
     private string $urlId;
-    private string $id;
+    private ?int $id;
     private string $statusCode;
     private ?string $h1;
     private ?string $title;
@@ -35,6 +35,8 @@ class Check
             ->setCreatedAt($row['created_at']);
         return $check;
     }
+
+
 
     public function check(string $url): void
     {
@@ -72,7 +74,7 @@ class Check
         return $this->id ?? '';
     }
 
-    public function setId(string $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;

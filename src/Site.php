@@ -8,7 +8,7 @@ use Valitron\Validator;
 class Site
 {
     private string $url;
-    private string $id;
+    private ?int $id;
     private string $timestamp;
     private string $lastStatusCode;
 
@@ -17,7 +17,6 @@ class Site
         $this->timestamp = Carbon::now()->format('Y-m-d H:i:s');
         $urlCol = parse_url($url);
         $this->url = $urlCol["scheme"] . "://" . $urlCol["host"];
-        $this->id = '';
         $this->lastStatusCode = '';
     }
 
@@ -52,7 +51,7 @@ class Site
         return $this->id;
     }
 
-    public function setId(string $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
