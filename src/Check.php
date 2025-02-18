@@ -13,9 +13,9 @@ class Check
     private string $urlId;
     private string $id;
     private string $statusCode;
-    private string $h1;
-    private string $title;
-    private string $description;
+    private ?string $h1;
+    private ?string $title;
+    private ?string $description;
     private string $createdAt;
 
     public function __construct(string $urlId)
@@ -24,7 +24,7 @@ class Check
         $this->setCreatedAt(Carbon::now()->format('Y-m-d H:i:s'));
     }
 
-    public static function fromFetchArray(array $row)
+    public static function fromFetchArray(array $row): self
     {
         $check = new self($row['url_id']);
         $check->setId($row['id'])
@@ -36,7 +36,7 @@ class Check
         return $check;
     }
 
-    public function check(string $url)
+    public function check(string $url): void
     {
         $client = new Client([
             'base_uri' => $url,
@@ -48,27 +48,12 @@ class Check
         $body = $response->getBody();
         $stringBody = (string) $body;
         $document = new Document($stringBody);
-        if ($document->has('title')) {
-            $titlesCollection = $document->find('title');
-            if (count($titlesCollection) > 0) {
-                $title = ($titlesCollection[0]);
-                $this->title = $title instanceof  Element ? $title->text() : '';
-            }
-        }
-        if ($document->has('h1')) {
-            $h1Collection =  $document->find('h1');
-            if (count($h1Collection) > 0) {
-                $h1 = $h1Collection[0];
-                $this->h1 = $h1 instanceof Element ? $h1->text() : '';
-            }
-        }
-        $metaCollection = $document->find("//meta[@name='description']", Query::TYPE_XPATH);
-        if (count($metaCollection) > 0) {
-            $meta = $metaCollection[0];
-            if ($meta->hasAttribute('content')) {
-                $this->description = (string)$meta->getAttribute('content');
-            }
-        }
+        $title = $document->first('title');
+        $this->title = $title?->text();
+        $h1 = $document->first('h1');
+        $this->h1 = $h1?->text();
+        $meta = $document->first('meta[name=description]');
+        $this->description = (string)$meta?->getAttribute('content');
     }
 
     public function getUrlId(): string

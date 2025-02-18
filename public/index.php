@@ -19,6 +19,34 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 
+$app = AppFactory::createFromContainer($container);
+
+//Errors handlers
+/*
+$httpNotFoundExceptionHandler = function (
+    ServerRequestInterface $request,
+    HttpNotFoundException $exception,
+) use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+    $this->get('renderer')->render($response, 'pageNotFound.phtml');
+    return $response->withStatus(404);
+};
+
+
+$defaultExceptionHandler = function (
+    ServerRequestInterface $request,
+    Throwable $exception,
+) use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+    $this->get('renderer')->render($response, 'serverError.phtml');
+    return $response->withStatus(500);
+};
+
+//Add Error Middleware
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setErrorHandler(HttpNotFoundException::class, $httpNotFoundExceptionHandler);
+$errorMiddleware->setDefaultErrorHandler($defaultExceptionHandler);
+*/
 session_start();
 $dotenv = Dotenv::createImmutable((__DIR__ . '/..'));
 $dotenv->safeLoad();
@@ -34,7 +62,7 @@ $container->set('renderer', fn() => new PhpRenderer(__DIR__ . '/../templates'));
 
 $container->set('flash', fn() => new Messages());
 
-$app = AppFactory::createFromContainer($container);
+
 
 $router = $app->getRouteCollector()->getRouteParser();
 
@@ -68,29 +96,25 @@ $app->get('/urls/{id:[0-9]{1,20}}', function ($request, $response, $args) {
 $app->post('/urls', function ($request, $response) use ($router) {
     $aUrl = $request->getParsedBody()['url'];
     $urlRaw = $aUrl['name'];
-    if (Site::isUrlValid($urlRaw)) {
-        $site = new Site($urlRaw);
-        $siteDAO = $this->get(SiteDAO::class);
-        $siteFromDB = $siteDAO->findByName($site->getUrl());
-        if (is_null($siteFromDB)) {
-            if ($siteDAO->save($site)) {
-                $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
-                $id = $site->getId();
-            } else {
-                return $this->get('renderer')->render($response, 'serverError.phtml');
-            }
-        } else {
-            $this->get('flash')->addMessage('success', 'Страница уже существует');
-            $id = $siteFromDB->getId();
-        }
-        $url = $router->urlFor('url', ['id' => $id]);
-        $newResponse = $response->withRedirect($url);
-        return $newResponse;
-    } else {
+    if (!Site::isUrlValid($urlRaw)) {
         $params = ['isInputValid' => false, 'url' => $urlRaw];
         $newResponse = $response->withStatus(422);
         return $this->get('renderer')->render($newResponse, 'index.phtml', $params);
     }
+    $site = new Site($urlRaw);
+    $siteDAO = $this->get(SiteDAO::class);
+    $siteFromDB = $siteDAO->findByName($site->getUrl());
+    if (is_null($siteFromDB)) {
+        $siteDAO->save($site);
+        $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
+        $id = $site->getId();
+    } else {
+        $this->get('flash')->addMessage('success', 'Страница уже существует');
+        $id = $siteFromDB->getId();
+    }
+    $url = $router->urlFor('url', ['id' => $id]);
+    $newResponse = $response->withRedirect($url);
+    return $newResponse;
 });
 
 $app->post('/urls/{url_id:[0-9]{1,20}}/checks', function ($request, $response, $args) use ($router) {
@@ -110,30 +134,5 @@ $app->post('/urls/{url_id:[0-9]{1,20}}/checks', function ($request, $response, $
     $newResponse = $response->withRedirect($url);
     return $newResponse;
 });
-
-//Errors handlers
-$httpNotFoundExceptionHandler = function (
-    ServerRequestInterface $request,
-    HttpNotFoundException $exception,
-) use ($app) {
-    $response = $app->getResponseFactory()->createResponse();
-    $this->get('renderer')->render($response, 'pageNotFound.phtml');
-    return $response->withStatus(404);
-};
-
-
-$defaultExceptionHandler = function (
-    ServerRequestInterface $request,
-    Throwable $exception,
-) use ($app) {
-    $response = $app->getResponseFactory()->createResponse();
-    $this->get('renderer')->render($response, 'serverError.phtml');
-    return $response->withStatus(500);
-};
-
-//Add Error Middleware
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
-$errorMiddleware->setErrorHandler(HttpNotFoundException::class, $httpNotFoundExceptionHandler);
-$errorMiddleware->setDefaultErrorHandler($defaultExceptionHandler);
 
 $app->run();

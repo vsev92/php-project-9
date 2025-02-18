@@ -60,7 +60,7 @@ class SiteDAO
         return $result;
     }
 
-    public function findByName(string $name)
+    public function findByName(string $name): ?Site
     {
         $sql = "SELECT * FROM urls WHERE name = :name";
         $stmt = $this->conn->prepare($sql);
@@ -72,7 +72,7 @@ class SiteDAO
         return null;
     }
 
-    public function findById(string $id)
+    public function findById(string $id): ?Site
     {
         $sql = "SELECT * FROM urls WHERE id = :id";
         $stmt = $this->conn->prepare($sql);

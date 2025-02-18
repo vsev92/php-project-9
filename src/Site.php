@@ -21,7 +21,7 @@ class Site
         $this->lastStatusCode = '';
     }
 
-    public static function fromFetchArrayRow(array $row)
+    public static function fromFetchArrayRow(array $row): self
     {
         $site = new self($row['name']);
         $site->setTimestamp($row['created_at']);

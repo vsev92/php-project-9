@@ -43,7 +43,7 @@ class CheckDAO
         return $result;
     }
 
-    public function findChecksBySiteId(string $id)
+    public function findChecksBySiteId(string $id): ?array
     {
         $sql = "SELECT * FROM url_checks WHERE url_id = :id";
         $stmt = $this->conn->prepare($sql);
