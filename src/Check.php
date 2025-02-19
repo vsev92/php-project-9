@@ -50,8 +50,13 @@ class Check
         $body = $response->getBody();
         $stringBody = (string) $body;
         $document = new Document($stringBody);
-        $this->title = $document->first('title')?->text();
-        $this->h1 = $document->first('h1')?->text();
+
+        $title = $document->first('title');
+        $this->title = $title instanceof  Element ? $title->text() : '';
+
+        $h1 = $document->first('h1');
+        $this->h1 = $h1 instanceof  Element ? $h1->text() : '';
+
         $meta = $document->first('meta[name=description]');
         $this->description = (string)$meta?->getAttribute('content');
     }
